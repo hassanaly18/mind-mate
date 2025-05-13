@@ -10,7 +10,7 @@ export async function POST(req) {
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
-        method: POST,
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_GROQ_API_KEY}`,

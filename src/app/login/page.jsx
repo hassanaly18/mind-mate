@@ -8,31 +8,73 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    setLoading(true);
+  //   setLoading(true);
 
-    const authFunction = isLogin
-      ? supabase.auth.signInWithPassword
-      : supabase.auth.signUp;
+  //   const authFunction = isLogin
+  //     ? supabase.auth.signInWithPassword
+  //     : supabase.auth.signUp;
 
-    const { data, error } = await authFunction({
+  //   const { data, error } = await authFunction({
+  //     email,
+  //     password,
+  //   });
+
+  //   // const {data, error} = await supabase.from("journal_entries").select("*");
+  //   // console.log(data)
+
+  //   if (error) {
+  //     alert(error.message);
+  //   } else {
+  //     alert(isLogin ? "Login successful" : "Signup successful");
+  //   }
+
+  //   setLoading(false);
+  // };
+
+  const handleLogin=async()=>{
+    const {data, error} = await supabase.auth.signInWithPassword({
       email,
-      password,
-    });
+      password
+    })
 
-    // const {data, error} = await supabase.from("journal_entries").select("*");
-    // console.log(data)
+    if(error){
+      alert(error.message)
+    }
+    else{
+      alert("Login successful")
+    }
+  }
 
-    if (error) {
-      alert(error.message);
-    } else {
-      alert(isLogin ? "Login successful" : "Signup successful");
+  const handleSignup = async()=>{
+    const {data, error} = await supabase.auth.signUp({
+      email,
+      password
+    })
+
+    if(error){
+      alert(error.message)
+    }
+    else{
+      alert("Signup successful, check your email")
+    }
+  }
+
+  const handleSubmit = async(e)=>{
+    e.preventDefault()
+    setLoading(true)
+
+    if(isLogin){
+      await handleLogin()
+    }
+    else{
+      await handleSignup()
     }
 
-    setLoading(false);
-  };
+    setLoading(false)
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
       <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg w-full max-w-md">
@@ -64,6 +106,9 @@ const AuthPage = () => {
           >
             {loading ? "Processing...." : isLogin ? "Login" : "Signup"}
           </button>
+          <p className="text-sm text-center text-gray-600 mt-4 cursor-pointer hover:underline" onClick={()=>setIsLogin(!isLogin)}>
+            {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+          </p>
         </form>
       </div>
     </div>

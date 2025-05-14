@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 const Timeline = () => {
   const [entries, setEntries] = useState([]);
+  const [expandedEntry, setExpandedEntry] = useState({})
   const router = useRouter();
 
   useEffect(() => {
@@ -32,6 +33,19 @@ const Timeline = () => {
       setEntries(data || []);
     }
   };
+
+  const toggleExpand = (id)=>{
+    setExpandedEntry((prev)=>({
+      ...prev,
+      [id]: !prev[id]
+    }))
+  }
+
+  const truncateText = (text, maxLines=1)=>{
+    const lines = text.split("\n")
+    return lines.length <= maxLines ? text:lines.slice(0, maxLines).join("\n") + "..."
+  }
+
   return (
     <div className="max-w-4xl mx-auto mt-12 px-4 space-y-6">
       <h1 className="text-3xl font-bold text-center text-blue-500 mb-6">
@@ -47,7 +61,12 @@ const Timeline = () => {
               <div className="text-sm text-gray-400">{new Date(entry.created_at).toLocaleString()}</div>
               <div className="mt-2 mb-1 text-lg">
                 <p className="text-gray-300">{entry.content}</p>
-                <div className="mt-2 italic text-blue-400">AI Reflection: {entry.ai_response}</div>
+                <div className="mt-2 italic text-blue-400">AI Reflection: {expandedEntry[entry.id] ? entry.ai_response : truncateText(entry.ai_response)}</div>
+                {entry.ai_response.split("\n").length >3 && (
+                  <button className="text-sm text-blue-300 hover:underline mt-1 cursor-pointer" onClick={()=>toggleExpand(entry.id)}>
+                    {expandedEntry[entry.id] ? "View Less" : "View More"}
+                  </button>
+                )}
               </div>
             </div>
           ))}

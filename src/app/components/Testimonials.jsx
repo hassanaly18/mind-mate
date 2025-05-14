@@ -15,7 +15,7 @@ const Testimonials = () => {
                     - Sarah J., MindMate User
                 </p>
             </div>
-            <div className='bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md'>
+            <div  className=' bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md'>
                 <p className='italic text-gray-700 dark:text-gray-300'>
                     "I love tracking my mood with MindMate. The insights I get from my journal entries are incredibly helpful. It's like having a personal therapist in my pocket!"
                 </p>
